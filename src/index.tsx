@@ -3,13 +3,24 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { AuthProvider } from "./react-oidc-context";
+
+
+const oidcConfig = {
+  authority: "https://localhost:7072/",
+  client_id: "Template",
+  redirect_uri: "http://localhost:3000/authentication/callback",
+  scope : "openid profile offline_access roles Template"
+};
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
   <React.StrictMode>
-    <App />
+    <AuthProvider {...oidcConfig}>
+      <App />
+    </AuthProvider>
   </React.StrictMode>
 );
 
