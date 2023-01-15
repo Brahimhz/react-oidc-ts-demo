@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import './App.css';
 import { useAuth} from "./react-oidc-context";
 import axios from "axios";
@@ -8,6 +8,7 @@ import axios from "axios";
 function App() {
   const auth = useAuth();
   
+
 
   const [Public, setPublic] = React.useState("");
   const [Private, setPrivate] = React.useState(null);

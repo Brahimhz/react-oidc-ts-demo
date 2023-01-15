@@ -13,6 +13,14 @@ export const useAuth = (): AuthContextProps => {
         throw new Error("AuthProvider context is undefined, please verify you are calling useAuth() as child of a <AuthProvider> component.");
     }
 
+    React.useEffect(() => {
+        return context.events.addAccessTokenExpiring(() => {
+            alert("You're about to be signed out due to inactivity. Press continue to stay signed in.")
+                
+            context.signinSilent();
+        })
+    }, [context.events, context.signinSilent]);
+
     if(context?.isAuthenticated)
     {
         fetchIntercept.register({
@@ -23,12 +31,12 @@ export const useAuth = (): AuthContextProps => {
                     config.headers = config.headers || {};
             
                     config.headers['Authorization'] = "Bearer " + context.user?.access_token ;
-                    config.headers['Content-Type'] = "application/json" ;
+                    //config.headers['Content-Type'] = "application/json" ;
                     return [url, config];
             
                 }else{
                     defaultConfig.headers['Authorization'] = "Bearer " + context.user?.access_token ;
-                    defaultConfig.headers['Content-Type'] = "application/json" ;
+                    //defaultConfig.headers['Content-Type'] = "application/json" ;
                     return [url, defaultConfig];
                 }
             }
