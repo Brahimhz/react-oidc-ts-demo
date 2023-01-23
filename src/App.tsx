@@ -2,6 +2,9 @@ import React from "react";
 import './App.css';
 import { useAuth} from "./react-oidc-context";
 import axios from "axios";
+import copy from "copy-to-clipboard";  
+import ReactJson from "react-json-view";
+
 
 
 
@@ -13,6 +16,9 @@ function App() {
   const [Public, setPublic] = React.useState("");
   const [Private, setPrivate] = React.useState(null);
   const [Admin, setAdmin] = React.useState(null);
+
+  const [AccessTokenPayload, setAccessTokenPayload] = React.useState(undefined);
+
 
 
     async function handlePublic () {
@@ -69,6 +75,10 @@ function App() {
             });
     }
 
+    const copyToClipboard = () => {
+      copy(auth.user?.access_token ?? "Null");
+    }
+
 
     switch (auth.activeNavigator) {
         case "signinSilent":
@@ -111,7 +121,39 @@ function App() {
 
             {Admin && <p>{Admin}</p>}
 
+            <button
+                type="button"
+                className="btn btn-primary"
+                onClick={() => copyToClipboard()}
+            >
+              Access Token
+            </button>
+
+            <button
+                type="button"
+                className="btn btn-primary"
+                onClick={() => setAccessTokenPayload(auth.user?.accessTokenPayload)}
+            >
+              Access Token Payload
+            </button>
+            
             <button onClick={() => void auth.removeUser()}>Log out</button>
+
+            {
+              AccessTokenPayload && 
+              <ReactJson 
+                src={AccessTokenPayload} 
+                style = {{
+                          borderStyle: "solid",
+                          borderWidth: "5px",
+                          borderColor: "blue",
+                          borderRadius: "8px",
+                          margin : "2%",
+                          padding : "2%"
+                        }}
+              />
+            }
+
         </div>
         );
     }
